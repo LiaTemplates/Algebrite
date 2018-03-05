@@ -35,13 +35,13 @@ Function reference: http://algebrite.org/docs/latest-stable/reference.html
 These examples are taken from the website http://algebrite.org double-click onto
 the listing to edit it.
 
-```javascript
+```Maxima
 x + x
 ```
 @eval
 
 
-```javascript
+```Maxima
 f=sin(t)^4-2*cos(t/2)^3*sin(t)
 
 f=circexp(f)
