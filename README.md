@@ -36,10 +36,13 @@ These examples are taken from the website http://algebrite.org double-click onto
 the listing to edit it.
 
 ```Maxima
-x + x
+(3 * x - 5x)^3 * (x + x)
+
+60!
 ```
 @eval
 
+The following example might take a few seconds ...
 
 ```Maxima
 f=sin(t)^4-2*cos(t/2)^3*sin(t)
