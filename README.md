@@ -8,7 +8,7 @@ narrator: US English Female
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@eval:    <script> Algebrite.run(`{X}`) </script>
+@eval:    <script> Algebrite.run(`{{0}}`) </script>
 
 -->
 
@@ -16,6 +16,8 @@ script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle
 
 Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
 http://algebrite.org
+
+See the rendered version [here](https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md).
 
 Algebrite is...
 
