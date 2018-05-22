@@ -3,7 +3,7 @@
 author:   André Dietrich
 email:    andre.dietrich@ovgu.de
 version:  1.0.0
-language: en_US
+language: en
 narrator: US English Female
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
