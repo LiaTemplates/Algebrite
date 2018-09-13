@@ -8,7 +8,7 @@ narrator: US English Female
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@eval:    <script> Algebrite.run(`@code`) </script>
+@eval:    <script> Algebrite.run(`@input`) </script>
 
 -->
 
