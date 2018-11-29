@@ -8,7 +8,7 @@ narrator: US English Female
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@eval:    <script> Algebrite.run(`@input`) </script>
+@algebrite.eval:    <script> Algebrite.run(`@input`) </script>
 
 -->
 
@@ -42,7 +42,7 @@ the listing to edit it.
 
 60!
 ```
-@eval
+@algebrite.eval
 
 The following example might take a few seconds ...
 
@@ -53,4 +53,4 @@ f=circexp(f)
 
 defint(f,t,0,2*pi)
 ```
-@eval
+@algebrite.eval
