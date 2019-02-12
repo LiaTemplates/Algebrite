@@ -1,23 +1,52 @@
 <!--
-
 author:   André Dietrich
+
 email:    andre.dietrich@ovgu.de
+
 version:  1.0.0
+
 language: en
+
 narrator: US English Female
+
+comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@algebrite.eval:    <script> Algebrite.run(`@input`) </script>
-
+@algebrite.eval: <script> Algebrite.run(`@input`) </script>
 -->
 
 # Algebrite-Template
 
+                         --{{0}}--
 Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
-http://algebrite.org
+http://algebrite.org to be used in [LiaScript](https://LiaScript.github.io) to
+make Markdown code-blocks executable.
 
-See the rendered version [here](https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md).
+__Try it on LiaScript:__
+
+https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md
+
+__See the project on Github:__
+
+https://github.com/liaScript/algebrite_template
+
+                         --{{1}}--
+Like with other LiaScript templates, there are three ways to integrate
+Algebrite, but the easiest way is to copy the defintion from
+[Sec. Implementation](#4).
+
+                           {{1}}
+1. Load the macros via
+
+   `import: https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md`
+
+2. __Copy the definitions into your Project__
+
+3. Clone this repository on GitHub
+
+
+## More Information
 
 Algebrite is...
 
@@ -32,12 +61,12 @@ Algebrite is...
 Function reference: http://algebrite.org/docs/latest-stable/reference.html
 
 
-## Examples
+## `@algebrite.eval`
 
 These examples are taken from the website http://algebrite.org double-click onto
 the listing to edit it.
 
-```Maxima
+``` Maxima
 (3 * x - 5x)^3 * (x + x)
 
 60!
@@ -54,3 +83,18 @@ f=circexp(f)
 defint(f,t,0,2*pi)
 ```
 @algebrite.eval
+
+
+## Implementation
+
+--{{0}}--
+
+Compared to other macros, using Algebrite is actually quite simple. The two
+lines below are sufficient, the first one
+
+
+``` html
+script: https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
+
+@algebrite.eval: <script> Algebrite.run(`@input`) </script>
+```
