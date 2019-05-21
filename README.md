@@ -13,10 +13,10 @@ comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@algebrite.eval: <script> Algebrite.run(`@input`) </script>
+@Algebrite.eval: <script> Algebrite.run(`@input`) </script>
 -->
 
-# Algebrite-Template
+# Algebrite - Template
 
                          --{{0}}--
 Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
@@ -25,11 +25,11 @@ make Markdown code-blocks executable.
 
 __Try it on LiaScript:__
 
-https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md
+https://liascript.github.io/course/?https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md
 
 __See the project on Github:__
 
-https://github.com/liaScript/algebrite_template
+https://github.com/liaTemplates/algebrite
 
                          --{{1}}--
 Like with other LiaScript templates, there are three ways to integrate
@@ -39,7 +39,7 @@ Algebrite, but the easiest way is to copy the defintion from
                            {{1}}
 1. Load the macros via
 
-   `import: https://raw.githubusercontent.com/liaScript/algebrite_template/master/README.md`
+   `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -61,7 +61,7 @@ Algebrite is...
 Function reference: http://algebrite.org/docs/latest-stable/reference.html
 
 
-## `@algebrite.eval`
+## `@Algebrite.eval`
 
 These examples are taken from the website http://algebrite.org double-click onto
 the listing to edit it.
@@ -71,7 +71,7 @@ the listing to edit it.
 
 60!
 ```
-@algebrite.eval
+@Algebrite.eval
 
 The following example might take a few seconds ...
 
@@ -82,13 +82,12 @@ f=circexp(f)
 
 defint(f,t,0,2*pi)
 ```
-@algebrite.eval
+@Algebrite.eval
 
 
 ## Implementation
 
---{{0}}--
-
+                         --{{0}}--
 Compared to other macros, using Algebrite is actually quite simple. The two
 lines below are sufficient, the first one
 
@@ -96,5 +95,12 @@ lines below are sufficient, the first one
 ``` html
 script: https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
 
-@algebrite.eval: <script> Algebrite.run(`@input`) </script>
+@Algebrite.eval: <script> algebrite.run(`@input`) </script>
 ```
+
+                         --{{1}}--
+If you want to minimize loading effort in your LiaScript project, you can also
+copy this code and paste it into your main comment header, see the code in the
+raw file of this document.
+
+{{1}} https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md
