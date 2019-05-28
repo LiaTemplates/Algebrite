@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.1.0
+version:  0.1.1
 
 language: en
 
@@ -12,6 +12,10 @@ narrator: US English Female
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
 script:   https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
+
+attribute: [Algebrite](http://algebrite.org/)
+           by [Davide Della Casa](http://davidedc.com/)
+           is licensed under [MIT](https://opensource.org/licenses/MIT)
 
 @Algebrite.eval: <script> Algebrite.run(`@input`) </script>
 -->
