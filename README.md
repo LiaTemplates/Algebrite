@@ -3,11 +3,13 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.1.1
+version:  0.1.2
 
 language: en
 
 narrator: US English Female
+
+logo:     https://live.staticflickr.com/7327/11125348744_2a75b75427_b.jpg
 
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
