@@ -1,0 +1,27 @@
+{
+  "name": "lia-algebrite",
+  "version": "1.0.0",
+  "description": "A template to make algebrite usable in LiaScript",
+  "app": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx parcel build src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liaTemplates/Algebrite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liaTemplates/Algebrite/issues"
+  },
+  "homepage": "https://github.com/liaTemplates/Algebrite#readme",
+  "targets": {
+    "app": {}
+  },
+  "devDependencies": {
+    "algebrite": "^1.4.0",
+    "parcel": "^2.2.1"
+  }
+}

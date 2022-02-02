@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.1.3
+version:  0.2.0
 
 language: en
 
@@ -13,13 +13,13 @@ logo:     https://live.staticflickr.com/7327/11125348744_2a75b75427_b.jpg
 
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
-script:   https://cdn.jsdelivr.net/npm/algebrite@1.3.1/dist/algebrite.min.js
+script:   dist/index.js
 
 attribute: [Algebrite](http://algebrite.org/)
            by [Davide Della Casa](http://davidedc.com/)
            is licensed under [MIT](https://opensource.org/licenses/MIT)
 
-@Algebrite.eval: <script> Algebrite.run(`@input`) </script>
+@Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 -->
 
 # Algebrite - Template
