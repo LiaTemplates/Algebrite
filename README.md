@@ -13,7 +13,7 @@ logo:     https://live.staticflickr.com/7327/11125348744_2a75b75427_b.jpg
 
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
-script:   dist/index.js
+script:   https://cdn.jsdelivr.net/gh/liatemplates/algebrite@0.2.0/dist/index.js
 
 attribute: [Algebrite](http://algebrite.org/)
            by [Davide Della Casa](http://davidedc.com/)
@@ -43,9 +43,13 @@ Algebrite, but the easiest way is to copy the defintion from
 [Sec. Implementation](#4).
 
                            {{1}}
-1. Load the macros via
+1. Load the latest macros via (this might cause breaking changes)
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
+
+   or the current version 0.2.0 via:
+
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.0/README.md`
 
 2. __Copy the definitions into your Project__
 
