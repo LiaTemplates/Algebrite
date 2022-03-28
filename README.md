@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.2.0
+version:  0.2.1
 
 language: en
 
@@ -13,7 +13,7 @@ logo:     https://live.staticflickr.com/7327/11125348744_2a75b75427_b.jpg
 
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
-script:   https://cdn.jsdelivr.net/gh/liatemplates/algebrite@0.2.0/dist/index.js
+script:   https://cdn.jsdelivr.net/gh/liatemplates/algebrite@0.2.1/dist/index.js
 
 attribute: [Algebrite](http://algebrite.org/)
            by [Davide Della Casa](http://davidedc.com/)
@@ -26,7 +26,7 @@ attribute: [Algebrite](http://algebrite.org/)
 
                          --{{0}}--
 Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
-http://algebrite.org to be used in [LiaScript](https://LiaScript.github.io) to
+https://algebrite.org to be used in [LiaScript](https://LiaScript.github.io) to
 make Markdown code-blocks executable.
 
 __Try it on LiaScript:__
@@ -47,9 +47,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.2.0 via:
+   or the current version 0.2.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.0/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.1/README.md`
 
 2. __Copy the definitions into your Project__
 
