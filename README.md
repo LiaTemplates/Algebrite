@@ -13,7 +13,7 @@ logo:     https://live.staticflickr.com/7327/11125348744_2a75b75427_b.jpg
 
 comment:  Template for the Algebrite JavaScript Computer-Algebra-System (CAS).
 
-script:   https://cdn.jsdelivr.net/gh/liatemplates/algebrite@0.2.1/dist/index.js
+script:   dist/index.js
 
 attribute: [Algebrite](http://algebrite.org/)
            by [Davide Della Casa](http://davidedc.com/)
