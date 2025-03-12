@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.2.1
+version:  0.2.2
 
 language: en
 
@@ -20,6 +20,13 @@ attribute: [Algebrite](http://algebrite.org/)
            is licensed under [MIT](https://opensource.org/licenses/MIT)
 
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
+
+@Algebrite.check: <script>
+  let expression = `(@input) - (@0) == 0`;
+  expression = expression.replace(/\,/g, ".");
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
 -->
 
 # Algebrite - Template
@@ -49,7 +56,7 @@ Algebrite, but the easiest way is to copy the defintion from
 
    or the current version 0.2.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.1/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.2/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -93,6 +100,27 @@ f=circexp(f)
 defint(f,t,0,2*pi)
 ```
 @Algebrite.eval
+
+
+## Quizzes
+
+Using the `@Algebrite.check` macro, you can define quizzes, that are automatically checked.
+
+---
+
+6 + 6
+
+[[12]]
+@Algebrite.check(12)
+
+
+---
+
+try different expressions of `x ^ 2 - 1`
+
+[[x ^ 2 - 1]]
+@Algebrite.check(x^2-1)
+
 
 
 ## Implementation
