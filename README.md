@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.2.2
+version:  0.2.3
 
 language: en
 
@@ -27,6 +27,14 @@ attribute: [Algebrite](http://algebrite.org/)
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
+
+@Algebrite.check2: <script>
+  let expression = `abs((@input) - (@0)) < @1`;
+  expression = expression.replace(/\,/g, ".");
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
+
 -->
 
 # Algebrite - Template
@@ -56,7 +64,7 @@ Algebrite, but the easiest way is to copy the defintion from
 
    or the current version 0.2.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.2/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.3/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -102,25 +110,72 @@ defint(f,t,0,2*pi)
 @Algebrite.eval
 
 
-## Quizzes
+## `@Algebrite.check`
 
-Using the `@Algebrite.check` macro, you can define quizzes, that are automatically checked.
+                         --{{0}}--
+Using the `@Algebrite.check` macro, you can combine this with quizzes, to compare the result of an expression with a given value with different expressions. You can for 
 
----
+
+```
+6 + 6
+
+[[12]]
+@Algebrite.check(12)
+```
+
+                          --{{1}}--
+Try out different results like `12,0`, `3*4`, etc.
+
+    {{1}}
+<div>
 
 6 + 6
 
 [[12]]
 @Algebrite.check(12)
 
+----
 
----
+</div>
 
-try different expressions of `x ^ 2 - 1`
+
+                         --{{2}}--
+The same can be done with more complex expressions, try different expressions of `x ^ 2 - 1` like `-1 + x * x`.
+
+
+    {{2}}
+<div>
+
+```
+[[x ^ 2 - 1]]
+@Algebrite.check(x^2-1)
+```
+
+----
 
 [[x ^ 2 - 1]]
 @Algebrite.check(x^2-1)
 
+</div>
+
+                         --{{3}}--
+If your result might need to cope with some rounding errors, you can use the
+`@Algebrite.check2` macro, which allows you to define a tolerance value as the second parameter.
+
+<div>
+
+```
+[[1/3]]
+@Algebrite.check2(1/3,0.01)
+```
+
+----
+
+[[1/3]]
+@Algebrite.check2(1/3,0.01)
+
+
+</div>
 
 
 ## Implementation
@@ -131,9 +186,23 @@ lines below are sufficient, the first one
 
 
 ``` html
-script: https://cdn.rawgit.com/davidedc/Algebrite/master/dist/algebrite.bundle-for-browser.js
+script: dist/index.js
 
-@Algebrite.eval: <script> algebrite.run(`@input`) </script>
+@Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
+
+@Algebrite.check: <script>
+  let expression = `(@input) - (@0) == 0`;
+  expression = expression.replace(/\,/g, ".");
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
+
+@Algebrite.check2: <script>
+  let expression = `abs((@input) - (@0)) < @1`;
+  expression = expression.replace(/\,/g, ".");
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
 ```
 
                          --{{1}}--
