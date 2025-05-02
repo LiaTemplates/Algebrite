@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.2.3
+version:  0.3.0
 
 language: en
 
@@ -22,14 +22,49 @@ attribute: [Algebrite](http://algebrite.org/)
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let expression = `(@input) - (@0) == 0`;
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `(${input}) - (@0) == 0`;
   expression = expression.replace(/\,/g, ".");
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
 
 @Algebrite.check2: <script>
-  let expression = `abs((@input) - (@0)) < @1`;
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `abs((${input}) - (@0)) < @1`;
+  expression = expression.replace(/\,/g, ".");
+  alert(expression);
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
+
+@Algebrite.check_margin: <script>
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `(@0) <= (${input}) <= @1`;
   expression = expression.replace(/\,/g, ".");
   let result = window.Algebrite.simplify(expression);
   result == "1";
@@ -109,8 +144,9 @@ defint(f,t,0,2*pi)
 ```
 @Algebrite.eval
 
+## Quizzes
 
-## `@Algebrite.check`
+### `@Algebrite.check`
 
                          --{{0}}--
 Using the `@Algebrite.check` macro, you can combine this with quizzes, to compare the result of an expression with a given value with different expressions. You can for 
@@ -139,6 +175,7 @@ Try out different results like `12,0`, `3*4`, etc.
 </div>
 
 
+
                          --{{2}}--
 The same can be done with more complex expressions, try different expressions of `x ^ 2 - 1` like `-1 + x * x`.
 
@@ -158,7 +195,9 @@ The same can be done with more complex expressions, try different expressions of
 
 </div>
 
-                         --{{3}}--
+### `@Algebrite.check2`
+
+                         --{{0}}--
 If your result might need to cope with some rounding errors, you can use the
 `@Algebrite.check2` macro, which allows you to define a tolerance value as the second parameter.
 
@@ -174,8 +213,22 @@ If your result might need to cope with some rounding errors, you can use the
 [[1/3]]
 @Algebrite.check2(1/3,0.01)
 
-
 </div>
+
+
+### `@Algebrite.check_margin`
+
+                         --{{0}}--
+The `@Algebrite.check_margin` macro allows you to check if a value is within a certain range. This is useful for checking if a result is within a certain margin of error, while the first parameter defines the lower bound and the second parameter defines the upper bound.
+
+
+```
+-> [[ 1.5 ]] $km$
+@Algebrite.check_margin(1.4, 1.6)
+```
+
+-> [[ 1.5 ]] $km$
+@Algebrite.check_margin(1.4, 1.6)
 
 
 ## Implementation
@@ -191,14 +244,49 @@ script: dist/index.js
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let expression = `(@input) - (@0) == 0`;
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `(${input}) - (@0) == 0`;
   expression = expression.replace(/\,/g, ".");
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
 
 @Algebrite.check2: <script>
-  let expression = `abs((@input) - (@0)) < @1`;
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `abs((${input}) - (@0)) < @1`;
+  expression = expression.replace(/\,/g, ".");
+  alert(expression);
+  let result = window.Algebrite.simplify(expression);
+  result == "1";
+  </script>
+
+@Algebrite.check_margin: <script>
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+
+  let expression = `(@0) <= (${input}) <= @1`;
   expression = expression.replace(/\,/g, ".");
   let result = window.Algebrite.simplify(expression);
   result == "1";
