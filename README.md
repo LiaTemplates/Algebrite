@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.3.0
+version:  0.3.1
 
 language: en
 
@@ -49,7 +49,6 @@ attribute: [Algebrite](http://algebrite.org/)
 
   let expression = `abs((${input}) - (@0)) < @1`;
   expression = expression.replace(/\,/g, ".");
-  alert(expression);
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
@@ -97,9 +96,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.2.1 via:
+   or the current version 0.3.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.2.3/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.1/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -271,7 +270,6 @@ script: dist/index.js
 
   let expression = `abs((${input}) - (@0)) < @1`;
   expression = expression.replace(/\,/g, ".");
-  alert(expression);
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
