@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.3.1
+version:  0.3.2
 
 language: en
 
@@ -54,8 +54,7 @@ attribute: [Algebrite](http://algebrite.org/)
   </script>
 
 @Algebrite.check_margin: <script>
-  let input = `@input`;
-  
+  let input = `@input`; 
   try {
     const json = JSON.parse(input);
     if (Array.isArray(json)) {
@@ -63,8 +62,8 @@ attribute: [Algebrite](http://algebrite.org/)
     } 
   } catch (e) {}
 
-  let expression = `(@0) <= (${input}) <= @1`;
-  expression = expression.replace(/\,/g, ".");
+  let expression = input.replace(/\,/g, ".");
+  expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
@@ -96,9 +95,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.3.1 via:
+   or the current version 0.3.2 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.1/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.2/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -275,8 +274,7 @@ script: dist/index.js
   </script>
 
 @Algebrite.check_margin: <script>
-  let input = `@input`;
-  
+  let input = `@input`; 
   try {
     const json = JSON.parse(input);
     if (Array.isArray(json)) {
@@ -284,8 +282,8 @@ script: dist/index.js
     } 
   } catch (e) {}
 
-  let expression = `(@0) <= (${input}) <= @1`;
-  expression = expression.replace(/\,/g, ".");
+  let expression = input.replace(/\,/g, ".");
+  expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
   let result = window.Algebrite.simplify(expression);
   result == "1";
   </script>
