@@ -3,9 +3,11 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.3.2
+version:  0.3.3
 
 language: en
+
+edit:     true
 
 narrator: US English Female
 
@@ -30,11 +32,20 @@ attribute: [Algebrite](http://algebrite.org/)
       input = json[0];
     } 
   } catch (e) {}
+  input = input.trim();
 
-  let expression = `(${input}) - (@0) == 0`;
-  expression = expression.replace(/\,/g, ".");
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = `(${input}) - (@0) == 0`;
+      expression = expression.replace(/\,/g, ".");
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 
 @Algebrite.check2: <script>
@@ -47,10 +58,20 @@ attribute: [Algebrite](http://algebrite.org/)
     } 
   } catch (e) {}
 
-  let expression = `abs((${input}) - (@0)) < @1`;
-  expression = expression.replace(/\,/g, ".");
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  input = input.trim();
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = `abs((${input}) - (@0)) < @1`;
+      expression = expression.replace(/\,/g, ".");
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 
 @Algebrite.check_margin: <script>
@@ -62,10 +83,20 @@ attribute: [Algebrite](http://algebrite.org/)
     } 
   } catch (e) {}
 
-  let expression = input.replace(/\,/g, ".");
-  expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  input = input.trim();
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = input.replace(/\,/g, ".");
+      expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 
 -->
@@ -95,9 +126,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.3.2 via:
+   or the current version 0.3.3 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.2/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.3/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -250,11 +281,20 @@ script: dist/index.js
       input = json[0];
     } 
   } catch (e) {}
+  input = input.trim();
 
-  let expression = `(${input}) - (@0) == 0`;
-  expression = expression.replace(/\,/g, ".");
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = `(${input}) - (@0) == 0`;
+      expression = expression.replace(/\,/g, ".");
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 
 @Algebrite.check2: <script>
@@ -267,10 +307,20 @@ script: dist/index.js
     } 
   } catch (e) {}
 
-  let expression = `abs((${input}) - (@0)) < @1`;
-  expression = expression.replace(/\,/g, ".");
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  input = input.trim();
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = `abs((${input}) - (@0)) < @1`;
+      expression = expression.replace(/\,/g, ".");
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 
 @Algebrite.check_margin: <script>
@@ -282,10 +332,20 @@ script: dist/index.js
     } 
   } catch (e) {}
 
-  let expression = input.replace(/\,/g, ".");
-  expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
-  let result = window.Algebrite.simplify(expression);
-  result == "1";
+  input = input.trim();
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let expression = input.replace(/\,/g, ".");
+      expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
+      let result = window.Algebrite.simplify(expression);
+      result == "1";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
   </script>
 ```
 
