@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.3.3
+version:  0.4.0
 
 language: en
 
@@ -39,7 +39,7 @@ attribute: [Algebrite](http://algebrite.org/)
   } else {
     try {
       let expression = `(${input}) - (@0) == 0`;
-      expression = expression.replace(/\,/g, ".");
+      expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
@@ -63,11 +63,11 @@ attribute: [Algebrite](http://algebrite.org/)
     send.lia("No input provided",[],false);
   } else {
     try {
-      let solution = "@0".replace(/\,/g, ".");
+      let solution = "@0".replace(/\,/g, ".").replace(/\\/g, "/");
       solution = solution.split("=");
       solution = solution[0] + "-" + solution[1];
 
-      let expression = "@input".replace(/\,/g, ".");
+      let expression = "@input".replace(/\,/g, ".").replace(/\\/g, "/");
       expression = expression.split("=");
 
       expression = expression[0] + "-" + expression[1];
@@ -98,7 +98,7 @@ attribute: [Algebrite](http://algebrite.org/)
   } else {
     try {
       let expression = `abs((${input}) - (@0)) < @1`;
-      expression = expression.replace(/\,/g, ".");
+      expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
@@ -122,7 +122,7 @@ attribute: [Algebrite](http://algebrite.org/)
     send.lia("No input provided",[],false);
   } else {
     try {
-      let expression = input.replace(/\,/g, ".");
+      let expression = input.replace(/\,/g, ".").replace(/\\/g, "/");
       expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
       let result = window.Algebrite.simplify(expression);
       result == "1";
@@ -159,9 +159,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.3.3 via:
+   or the current version 0.4.0 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.3.3/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.4.0/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -292,7 +292,7 @@ The `@Algebrite.check_margin` macro allows you to check if a value is within a c
 -> [[ 1.5 ]] $km$
 @Algebrite.check_margin(1.4, 1.6)
 
-#### `@Algebrite.check_expression`
+### `@Algebrite.check_expression`
 
                           --{{0}}--
 To check if an expression is equal to another expression, you can use the `@Algebrite.check_expression` macro.
