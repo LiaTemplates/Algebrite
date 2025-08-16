@@ -48,6 +48,39 @@ attribute: [Algebrite](http://algebrite.org/)
   }
   </script>
 
+@Algebrite.check_expression: <script>
+  let input = `@input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+  input = input.trim();
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let solution = "@0".replace(/\,/g, ".");
+      solution = solution.split("=");
+      solution = solution[0] + "-" + solution[1];
+
+      let expression = "@input".replace(/\,/g, ".");
+      expression = expression.split("=");
+
+      expression = expression[0] + "-" + expression[1];
+
+      let result = window.Algebrite.run(`${solution} - (${expression})`);
+
+      result == "0";
+    } catch(e) {
+      send.lia("Error in expression",[],false);
+    }
+  }
+  </script>
+
 @Algebrite.check2: <script>
   let input = `@input`;
   
@@ -258,6 +291,21 @@ The `@Algebrite.check_margin` macro allows you to check if a value is within a c
 
 -> [[ 1.5 ]] $km$
 @Algebrite.check_margin(1.4, 1.6)
+
+#### `@Algebrite.check_expression`
+
+                          --{{0}}--
+To check if an expression is equal to another expression, you can use the `@Algebrite.check_expression` macro.
+
+```
+[[x ^ 2 - 1 = 2x]]
+@Algebrite.check_expression(x^2-1-2x=0)
+```
+
+----
+
+[[x ^ 2 - 1 = 2x]]
+@Algebrite.check_expression(x^2-1-2x=0)
 
 
 ## Implementation
