@@ -25,26 +25,43 @@ attribute: [Algebrite](http://algebrite.org/)
 
 @Algebrite.check: <script>
   let input = `@input`;
-  
   try {
     const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
-  input = input.trim();
+    if (typeof json === "string") {
+      input = [json.trim()];
+    } else {
+      input = json.map(item => item.trim())
+    }
+  } catch (e) {
+    input = [input.trim()];
+  }
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
+  }
+
+  let output = "@0".trim();
+
+  if(output.startsWith("[") && output.endsWith("]")) {
+    output = output.slice(1, -1).split(";").map(item => item.trim());
   } else {
+    output = [output];
+  }
+
+  let rslt = true;
+  for (let i=0; i<input.length; i++) {
     try {
-      let expression = `(${input}) - (@0) == 0`;
+      let expression = `(${input[i]}) - (${output[i]}) == 0`;
       expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
       let result = window.Algebrite.simplify(expression);
-      result == "1";
+      if (result.q.a.value != 1n || input[i] == "") {
+        rslt = false;
+        break;
+      }
     } catch(e) {
       send.lia("Error in expression",[],false);
     }
+    rslt;
   }
   </script>
 
@@ -256,6 +273,9 @@ The same can be done with more complex expressions, try different expressions of
 @Algebrite.check(x^2-1)
 
 </div>
+
+$x=\;$ [[ 2/5 ]] $\;\;\wedge\;\; y=$  [[ 5/7 ]] $\;\;\wedge\;\; z=$  [[ 3/4 ]]
+@Algebrite.check([ 2/5; 5/7; 3/4 ])
 
 ### `@Algebrite.check2`
 
