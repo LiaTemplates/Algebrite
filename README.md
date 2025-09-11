@@ -25,12 +25,13 @@ attribute: [Algebrite](http://algebrite.org/)
 
 @Algebrite.check: <script>
   let input = `@input`;
+  
   try {
     const json = JSON.parse(input);
     if (typeof json === "string") {
       input = [json.trim()];
     } else {
-      input = json.map(item => item.trim())
+      input = json.map(item => item.trim());
     }
   } catch (e) {
     input = [input.trim()];
@@ -50,6 +51,10 @@ attribute: [Algebrite](http://algebrite.org/)
 
   let rslt = true;
   for (let i=0; i<input.length; i++) {
+    if (input[i] == "") {
+        rslt = false;
+        break;
+    }
     try {
       let expression = `(${input[i]}) - (${output[i]}) == 0`;
       expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
