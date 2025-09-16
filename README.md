@@ -59,7 +59,7 @@ attribute: [Algebrite](http://algebrite.org/)
       let expression = `(${input[i]}) - (${output[i]}) == 0`;
       expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
       let result = window.Algebrite.simplify(expression);
-      if (result.q.a.value != 1n || input[i] == "") {
+      if (!result.q.a || result.q.a.value != 1n ) {
         rslt = false;
         break;
       }
@@ -279,6 +279,8 @@ The same can be done with more complex expressions, try different expressions of
 
 </div>
 
+
+    {{3}}
 $x=\;$ [[ 2/5 ]] $\;\;\wedge\;\; y=$  [[ 5/7 ]] $\;\;\wedge\;\; z=$  [[ 3/4 ]]
 @Algebrite.check([ 2/5; 5/7; 3/4 ])
 
