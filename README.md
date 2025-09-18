@@ -59,12 +59,15 @@ attribute: [Algebrite](http://algebrite.org/)
       let expression = `(${input[i]}) - (${output[i]}) == 0`;
       expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
       let result = window.Algebrite.simplify(expression);
+
+      window.console.warn("Result:", result);
       if (!result.q.a || result.q.a.value != 1n ) {
         rslt = false;
         break;
       }
     } catch(e) {
-      send.lia("Error in expression",[],false);
+      rslt = false;
+      break;
     }
     rslt;
   }
@@ -98,7 +101,7 @@ attribute: [Algebrite](http://algebrite.org/)
 
       result == "0";
     } catch(e) {
-      send.lia("Error in expression",[],false);
+      false;
     }
   }
   </script>
@@ -124,7 +127,7 @@ attribute: [Algebrite](http://algebrite.org/)
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
-      send.lia("Error in expression",[],false);
+      false;
     }
   }
   </script>
@@ -149,7 +152,7 @@ attribute: [Algebrite](http://algebrite.org/)
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
-      send.lia("Error in expression",[],false);
+      false;
     }
   }
   </script>
