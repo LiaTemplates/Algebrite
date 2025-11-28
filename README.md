@@ -21,6 +21,19 @@ attribute: [Algebrite](http://algebrite.org/)
            by [Davide Della Casa](http://davidedc.com/)
            is licensed under [MIT](https://opensource.org/licenses/MIT)
 
+@onload
+window.inputClean = function(input) {
+  const commas = [",", "‚", "﹐", "，", "､"];
+  for(let i=0; i<commas.length; i++) {
+    input = input.replace(new RegExp("\\" + commas[i], "g"), ".");
+  }
+
+  input = input.replace(/\\/g, "/");
+
+  return input;
+}
+@end
+
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
@@ -57,7 +70,7 @@ attribute: [Algebrite](http://algebrite.org/)
     }
     try {
       let expression = `(${input[i]}) - (${output[i]}) == 0`;
-      expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
+      expression = window.inputClean(expression);
       let result = window.Algebrite.simplify(expression);
 
       window.console.warn("Result:", result);
@@ -88,11 +101,11 @@ attribute: [Algebrite](http://algebrite.org/)
     send.lia("No input provided",[],false);
   } else {
     try {
-      let solution = "@0".replace(/\,/g, ".").replace(/\\/g, "/");
+      let solution = window.inputClean("@0");
       solution = solution.split("=");
       solution = solution[0] + "-" + solution[1];
 
-      let expression = "@input".replace(/\,/g, ".").replace(/\\/g, "/");
+      let expression = window.inputClean("@input");
       expression = expression.split("=");
 
       expression = expression[0] + "-" + expression[1];
@@ -123,7 +136,7 @@ attribute: [Algebrite](http://algebrite.org/)
   } else {
     try {
       let expression = `abs((${input}) - (@0)) < @1`;
-      expression = expression.replace(/\,/g, ".").replace(/\\/g, "/");
+      expression = window.inputClean(expression);
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
@@ -147,7 +160,7 @@ attribute: [Algebrite](http://algebrite.org/)
     send.lia("No input provided",[],false);
   } else {
     try {
-      let expression = input.replace(/\,/g, ".").replace(/\\/g, "/");
+      let expression = window.inputClean(input);
       expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
       let result = window.Algebrite.simplify(expression);
       result == "1";
@@ -160,6 +173,8 @@ attribute: [Algebrite](http://algebrite.org/)
 -->
 
 # Algebrite - Template
+
+
 
                          --{{0}}--
 Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
@@ -184,9 +199,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.4.0 via:
+   or the current version 0.4.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.4.0/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.4.1/README.md`
 
 2. __Copy the definitions into your Project__
 
