@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.4.0
+version:  0.5.0
 
 language: en
 
@@ -124,24 +124,55 @@ window.inputClean = function(input) {
   
   try {
     const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
-
-  input = input.trim();
+    if (typeof json === "string") {
+      input = [json.trim()];
+    } else {
+      input = json.map(item => item.trim());
+    }
+  } catch (e) {
+    input = [input.trim()];
+  }
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
+  }
+
+  let lowerBounds = "@0".trim();
+  let upperBounds = "@1".trim();
+
+  if(lowerBounds.startsWith("[") && lowerBounds.endsWith("]")) {
+    lowerBounds = lowerBounds.slice(1, -1).split(";").map(item => item.trim());
   } else {
+    lowerBounds = [lowerBounds];
+  }
+
+  if(upperBounds.startsWith("[") && upperBounds.endsWith("]")) {
+    upperBounds = upperBounds.slice(1, -1).split(";").map(item => item.trim());
+  } else {
+    upperBounds = [upperBounds];
+  }
+
+  let rslt = true;
+  for (let i=0; i<input.length; i++) {
+    if (input[i] == "") {
+        rslt = false;
+        break;
+    }
     try {
-      let expression = `abs((${input}) - (@0)) < @1`;
+      let expression = `abs((${input[i]}) - (${lowerBounds[i]})) < ${upperBounds[i]}`;
       expression = window.inputClean(expression);
       let result = window.Algebrite.simplify(expression);
-      result == "1";
+
+      window.console.warn("Result:", result);
+      if (!result.q.a || result.q.a.value != 1n ) {
+        rslt = false;
+        break;
+      }
     } catch(e) {
-      false;
+      rslt = false;
+      break;
     }
+    rslt;
   }
   </script>
 
@@ -199,9 +230,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.4.1 via:
+   or the current version 0.5.0 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.4.1/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.5.0/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -322,6 +353,24 @@ If your result might need to cope with some rounding errors, you can use the
 
 </div>
 
+                        --{{1}}--
+If you need more inputs, you can also provide lists of values as input and output:
+
+    {{1}}
+```
+$a=$ [[ 1/3 ]]\
+$b=$ [[ 2/3 ]]\
+$c=$ [[ 3/3 ]]
+@Algebrite.check2([ 1/3 ; 2/3 ; 3/3 ], [0.01 ; 0.01 ; 0.01])
+```
+
+    {{1}}
+$a=$ [[ 1/3 ]]\
+$b=$ [[ 2/3 ]]\
+$c=$ [[ 3/3 ]]
+@Algebrite.check2([ 1/3 ; 2/3 ; 3/3 ], [0.01 ; 0.01 ; 0.01])
+
+
 
 ### `@Algebrite.check_margin`
 
@@ -395,24 +444,55 @@ script: dist/index.js
   
   try {
     const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
-
-  input = input.trim();
+    if (typeof json === "string") {
+      input = [json.trim()];
+    } else {
+      input = json.map(item => item.trim());
+    }
+  } catch (e) {
+    input = [input.trim()];
+  }
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
+  }
+
+  let lowerBounds = "@0".trim();
+  let upperBounds = "@1".trim();
+
+  if(lowerBounds.startsWith("[") && lowerBounds.endsWith("]")) {
+    lowerBounds = lowerBounds.slice(1, -1).split(";").map(item => item.trim());
   } else {
-    try {
-      let expression = `abs((${input}) - (@0)) < @1`;
-      expression = expression.replace(/\,/g, ".");
-      let result = window.Algebrite.simplify(expression);
-      result == "1";
-    } catch(e) {
-      send.lia("Error in expression",[],false);
+    lowerBounds = [lowerBounds];
+  }
+
+  if(upperBounds.startsWith("[") && upperBounds.endsWith("]")) {
+    upperBounds = upperBounds.slice(1, -1).split(";").map(item => item.trim());
+  } else {
+    upperBounds = [upperBounds];
+  }
+
+  let rslt = true;
+  for (let i=0; i<input.length; i++) {
+    if (input[i] == "") {
+        rslt = false;
+        break;
     }
+    try {
+      let expression = `abs((${input[i]}) - (${lowerBounds[i]})) < ${upperBounds[i]}`;
+      expression = window.inputClean(expression);
+      let result = window.Algebrite.simplify(expression);
+
+      window.console.warn("Result:", result);
+      if (!result.q.a || result.q.a.value != 1n ) {
+        rslt = false;
+        break;
+      }
+    } catch(e) {
+      rslt = false;
+      break;
+    }
+    rslt;
   }
   </script>
 
