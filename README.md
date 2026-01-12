@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.5.0
+version:  0.5.1
 
 language: en
 
@@ -26,6 +26,7 @@ window.inputClean = function(input) {
   const commas = [",", "‚", "﹐", "，", "､"];
   for(let i=0; i<commas.length; i++) {
     input = input.replace(new RegExp("\\" + commas[i], "g"), ".");
+    input = input.replace(/(\d+(?:\.\d+)?)\s*%/g, (_, num) => (parseFloat(num) / 100).toString());
   }
 
   input = input.replace(/\\/g, "/");
