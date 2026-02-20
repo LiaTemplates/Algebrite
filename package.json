@@ -21,7 +21,8 @@
     "app": {}
   },
   "devDependencies": {
+    "algebra-latex": "^2.0.3",
     "algebrite": "^1.4.0",
-    "parcel": "^2.16.3"
+    "parcel": "^2.16.4"
   }
 }

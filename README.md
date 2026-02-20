@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.5.1
+version:  0.6.0
 
 language: en
 
@@ -38,7 +38,7 @@ window.inputClean = function(input) {
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let input = `@input`;
+  let input = `@'input`;
   
   try {
     const json = JSON.parse(input);
@@ -54,6 +54,8 @@ window.inputClean = function(input) {
   if (input.length == 0) {
     send.lia("No input provided",[],false);
   }
+
+  input = input.map(item => window.latexToMath(item));
 
   let output = "@0".trim();
 
@@ -88,7 +90,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check_expression: <script>
-  let input = `@input`;
+  let input = `@'input`;
   
   try {
     const json = JSON.parse(input);
@@ -97,6 +99,7 @@ window.inputClean = function(input) {
     } 
   } catch (e) {}
   input = input.trim();
+  input = window.latexToMath(input);
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
@@ -121,7 +124,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check2: <script>
-  let input = `@input`;
+  let input = `@'input`;
   
   try {
     const json = JSON.parse(input);
@@ -137,6 +140,8 @@ window.inputClean = function(input) {
   if (input.length == 0) {
     send.lia("No input provided",[],false);
   }
+
+  input = input.map(item => window.latexToMath(item));
 
   let lowerBounds = "@0".trim();
   let upperBounds = "@1".trim();
@@ -192,7 +197,7 @@ window.inputClean = function(input) {
     send.lia("No input provided",[],false);
   } else {
     try {
-      let expression = window.inputClean(input);
+      let expression = window.inputClean(window.latexToMath(input));
       expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
       let result = window.Algebrite.simplify(expression);
       result == "1";
@@ -231,9 +236,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.5.0 via:
+   or the current version 0.6.0 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.5.0/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.0/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -411,37 +416,26 @@ lines below are sufficient, the first one
 
 
 ``` html
-script: dist/index.js
+script:   dist/index.js
+
+@onload
+window.inputClean = function(input) {
+  const commas = [",", "‚", "﹐", "，", "､"];
+  for(let i=0; i<commas.length; i++) {
+    input = input.replace(new RegExp("\\" + commas[i], "g"), ".");
+    input = input.replace(/(\d+(?:\.\d+)?)\s*%/g, (_, num) => (parseFloat(num) / 100).toString());
+  }
+
+  input = input.replace(/\\/g, "/");
+
+  return input;
+}
+@end
 
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let input = `@input`;
-  
-  try {
-    const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
-  input = input.trim();
-
-  if (input.length == 0) {
-    send.lia("No input provided",[],false);
-  } else {
-    try {
-      let expression = `(${input}) - (@0) == 0`;
-      expression = expression.replace(/\,/g, ".");
-      let result = window.Algebrite.simplify(expression);
-      result == "1";
-    } catch(e) {
-      send.lia("Error in expression",[],false);
-    }
-  }
-  </script>
-
-@Algebrite.check2: <script>
-  let input = `@input`;
+  let input = `@'input`;
   
   try {
     const json = JSON.parse(input);
@@ -457,6 +451,94 @@ script: dist/index.js
   if (input.length == 0) {
     send.lia("No input provided",[],false);
   }
+
+  input = input.map(item => window.latexToMath(item));
+
+  let output = "@0".trim();
+
+  if(output.startsWith("[") && output.endsWith("]")) {
+    output = output.slice(1, -1).split(";").map(item => item.trim());
+  } else {
+    output = [output];
+  }
+
+  let rslt = true;
+  for (let i=0; i<input.length; i++) {
+    if (input[i] == "") {
+        rslt = false;
+        break;
+    }
+    try {
+      let expression = `(${input[i]}) - (${output[i]}) == 0`;
+      expression = window.inputClean(expression);
+      let result = window.Algebrite.simplify(expression);
+
+      window.console.warn("Result:", result);
+      if (!result.q.a || result.q.a.value != 1n ) {
+        rslt = false;
+        break;
+      }
+    } catch(e) {
+      rslt = false;
+      break;
+    }
+    rslt;
+  }
+  </script>
+
+@Algebrite.check_expression: <script>
+  let input = `@'input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (Array.isArray(json)) {
+      input = json[0];
+    } 
+  } catch (e) {}
+  input = input.trim();
+  input = window.latexToMath(input);
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  } else {
+    try {
+      let solution = window.inputClean("@0");
+      solution = solution.split("=");
+      solution = solution[0] + "-" + solution[1];
+
+      let expression = window.inputClean("@input");
+      expression = expression.split("=");
+
+      expression = expression[0] + "-" + expression[1];
+
+      let result = window.Algebrite.run(`${solution} - (${expression})`);
+
+      result == "0";
+    } catch(e) {
+      false;
+    }
+  }
+  </script>
+
+@Algebrite.check2: <script>
+  let input = `@'input`;
+  
+  try {
+    const json = JSON.parse(input);
+    if (typeof json === "string") {
+      input = [json.trim()];
+    } else {
+      input = json.map(item => item.trim());
+    }
+  } catch (e) {
+    input = [input.trim()];
+  }
+
+  if (input.length == 0) {
+    send.lia("No input provided",[],false);
+  }
+
+  input = input.map(item => window.latexToMath(item));
 
   let lowerBounds = "@0".trim();
   let upperBounds = "@1".trim();
@@ -512,12 +594,12 @@ script: dist/index.js
     send.lia("No input provided",[],false);
   } else {
     try {
-      let expression = input.replace(/\,/g, ".");
+      let expression = window.inputClean(window.latexToMath(input));
       expression = `and((@0) <= (${expression}), (${expression}) <= (@1))`;
       let result = window.Algebrite.simplify(expression);
       result == "1";
     } catch(e) {
-      send.lia("Error in expression",[],false);
+      false;
     }
   }
   </script>
