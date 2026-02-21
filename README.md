@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.6.0
+version:  0.6.1
 
 language: en
 
@@ -229,16 +229,16 @@ https://github.com/liaTemplates/algebrite
                          --{{1}}--
 Like with other LiaScript templates, there are three ways to integrate
 Algebrite, but the easiest way is to copy the defintion from
-[Sec. Implementation](#4).
+[Sec. Implementation](#implementation).
 
                            {{1}}
 1. Load the latest macros via (this might cause breaking changes)
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.6.0 via:
+   or the current version 0.6.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.0/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.1/README.md`
 
 2. __Copy the definitions into your Project__
 
