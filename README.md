@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.6.1
+version:  0.6.2
 
 language: en
 
@@ -38,7 +38,7 @@ window.inputClean = function(input) {
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
@@ -90,7 +90,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check_expression: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
@@ -124,7 +124,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check2: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
@@ -236,9 +236,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.6.1 via:
+   or the current version 0.6.2 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.1/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.2/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -435,7 +435,7 @@ window.inputClean = function(input) {
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
@@ -487,7 +487,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check_expression: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
@@ -521,7 +521,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check2: <script>
-  let input = `@'input`;
+  let input = `@input`;
   
   try {
     const json = JSON.parse(input);
