@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    andre.dietrich@ovgu.de
 
-version:  0.6.2
+version:  0.6.3
 
 language: en
 
@@ -33,23 +33,50 @@ window.inputClean = function(input) {
 
   return input;
 }
+
+window.normalizeInputToArray = function(raw) {
+  // Always start from a string
+  let input = String(raw ?? "").trim();
+
+  // If it might be JSON text, first make it JSON-safe (turn \frac -> \\frac etc.)
+  const looksLikeJson = /^[\[\{"]/.test(input);
+  if (looksLikeJson) input = input.replace(/\\/g, "\\\\");
+
+  // Try JSON parsing only when it looks like JSON
+  if (looksLikeJson) {
+    try {
+      const parsed = JSON.parse(input);
+
+      // JSON string -> wrap into array
+      if (typeof parsed === "string") return [parsed.trim()];
+
+      // JSON array -> normalize items to strings
+      if (Array.isArray(parsed)) return parsed.map(x => String(x).trim());
+
+      // Anything else (object/number/etc.) -> stringify-ish fallback
+      return [String(parsed).trim()];
+    } catch (e) {
+      // fall through to plain-string handling
+    }
+  }
+
+  // Plain string input (e.g. \frac{12}{1}) -> just wrap
+  // If you want to also "fix" \frac into \\frac for storage/transport, apply escape here too:
+  // input = window.escapeNonJsonBackslashes(input);
+  return [input.trim()];
+}
+
+// Usage:
+const inputArr = normalizeInputToArray(String.raw`@input`);
+
 @end
 
 @Algebrite.eval: <script> window.Algebrite.run(`@input`) </script>
 
 @Algebrite.check: <script>
-  let input = `@input`;
-  
-  try {
-    const json = JSON.parse(input);
-    if (typeof json === "string") {
-      input = [json.trim()];
-    } else {
-      input = json.map(item => item.trim());
-    }
-  } catch (e) {
-    input = [input.trim()];
-  }
+  let input = window.normalizeInputToArray(String.raw`@input`);
+
+  window.console.warn("Parsed input:", input);
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
@@ -90,15 +117,8 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check_expression: <script>
-  let input = `@input`;
-  
-  try {
-    const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
-  input = input.trim();
+  let input = window.normalizeInputToArray(String.raw`@input`)[0];
+
   input = window.latexToMath(input);
 
   if (input.length == 0) {
@@ -124,18 +144,7 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check2: <script>
-  let input = `@input`;
-  
-  try {
-    const json = JSON.parse(input);
-    if (typeof json === "string") {
-      input = [json.trim()];
-    } else {
-      input = json.map(item => item.trim());
-    }
-  } catch (e) {
-    input = [input.trim()];
-  }
+  let input = window.normalizeInputToArray(String.raw`@input`);
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
@@ -183,15 +192,9 @@ window.inputClean = function(input) {
   </script>
 
 @Algebrite.check_margin: <script>
-  let input = `@input`; 
-  try {
-    const json = JSON.parse(input);
-    if (Array.isArray(json)) {
-      input = json[0];
-    } 
-  } catch (e) {}
+  let input = window.normalizeInputToArray(String.raw`@input`)[0];
 
-  input = input.trim();
+  input = window.latexToMath(input);
 
   if (input.length == 0) {
     send.lia("No input provided",[],false);
@@ -236,9 +239,9 @@ Algebrite, but the easiest way is to copy the defintion from
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.6.2 via:
+   or the current version 0.6.3 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.2/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.6.3/README.md`
 
 2. __Copy the definitions into your Project__
 
@@ -292,7 +295,7 @@ Using the `@Algebrite.check` macro, you can combine this with quizzes, to compar
 
 
 ```
-6 + 6
+6 + 6 
 
 [[12]]
 @Algebrite.check(12)
