@@ -21,8 +21,8 @@
     "app": {}
   },
   "devDependencies": {
-    "algebra-latex": "^2.0.3",
-    "algebrite": "^1.4.0",
+    "algebra-latex": "github:andre-dietrich/algebra-latex",
+    "algebrite": "github:liascript/algebrite",
     "parcel": "^2.16.4"
   }
 }

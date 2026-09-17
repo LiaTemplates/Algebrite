@@ -1,4 +1,4 @@
-window.Algebrite = require('algebrite')
+import 'algebrite' // sets globalThis.Algebrite
 import AlgebraLatex from 'algebra-latex'
 
 window.latexToMath = function (input) {
