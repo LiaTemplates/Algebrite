@@ -238,12 +238,19 @@ window.algebriteRun = function(input, console, pretty) {
 
 
 @Algebrite.check_margin: <script>
+  let rslt = false;
+  const units = window.Algebrite.run("units()");
+  window.Algebrite.run("units(1)");
   try {
     const input = window.inputClean(window.latexToMath(window.normalizeInputToArray(String.raw`@input`)[0]));
-    window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
+    
+    rslt = window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
   } catch (e) {
-    false;
+    rslt = false;
+    console.warn(e.message)
   }
+  window.Algebrite.run(`units(${units})`);
+  rslt
   </script>
 
 -->
@@ -547,12 +554,12 @@ bounds included. This is useful for measurements or estimations. Try `1,45`,
 `\frac{3}{2}` or `1.6`.
 
 ```markdown
--> [[ 1.5 ]] $km$
-@Algebrite.check_margin(1.4, 1.6)
+-> [[ 1.5km ]]
+@Algebrite.check_margin(1.4km, 1.6km)
 ```
 
--> [[ 1.5 ]] $km$
-@Algebrite.check_margin(1.4, 1.6)
+-> [[ 1.5km ]]
+@Algebrite.check_margin(1.4km, 1.6km)
 
 
 ### `@Algebrite.check_expression`
