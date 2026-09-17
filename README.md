@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    LiaScript@web.de
 
-version:  0.7.0
+version:  0.7.1
 
 language: en
 
@@ -64,6 +64,21 @@ window.normalizeInputToArray = function(raw) {
   // If you want to also "fix" \frac into \\frac for storage/transport, apply escape here too:
   // input = window.escapeNonJsonBackslashes(input);
   return [input.trim()];
+}
+
+// Runs fn with units(1|0) and restores the previous setting afterwards,
+// errors (e.g. incompatible units) count as a wrong answer.
+window.algebriteUnits = function(on, fn) {
+  const prev = window.Algebrite.run("units()");
+  window.Algebrite.run(`units(${on ? 1 : 0})`);
+  try {
+    return fn();
+  } catch (e) {
+    console.warn(e.message);
+    return false;
+  } finally {
+    window.Algebrite.run(`units(${prev})`);
+  }
 }
 
 // Usage:
@@ -194,12 +209,9 @@ window.algebriteRun = function(input, console, pretty) {
   };
   const input = window.normalizeInputToArray(String.raw`@input`);
   const values = toList("@0");
-  try {
+  window.algebriteUnits(/units\s*=\s*1/.test("@1"), () =>
     input.length === values.length && input.every((item, i) => item !== "" &&
-      window.Algebrite.run(window.inputClean(`(${window.latexToMath(item)}) == (${values[i]})`)) === "1");
-  } catch (e) {
-    false;
-  }
+      window.Algebrite.run(window.inputClean(`(${window.latexToMath(item)}) == (${values[i]})`)) === "1"));
   </script>
 
 @Algebrite.check_expression: <script>
@@ -211,11 +223,8 @@ window.algebriteRun = function(input, console, pretty) {
   if (input.trim() === "") {
     send.lia("No input provided", [], false);
   } else {
-    try {
-      window.Algebrite.run(`${toExpr(window.latexToMath(input))} == ${toExpr("@0")}`) === "1";
-    } catch (e) {
-      false;
-    }
+    window.algebriteUnits(/units\s*=\s*1/.test("@1"), () =>
+      window.Algebrite.run(`${toExpr(window.latexToMath(input))} == ${toExpr("@0")}`) === "1");
   }
   </script>
 
@@ -228,29 +237,17 @@ window.algebriteRun = function(input, console, pretty) {
   const input = window.normalizeInputToArray(String.raw`@input`);
   const values = toList("@0");
   const tolerances = toList("@1");
-  try {
+  window.algebriteUnits(!/units\s*=\s*0/.test("@2"), () =>
     input.length === values.length && input.every((item, i) => item !== "" &&
-      window.Algebrite.run(window.inputClean(`abs((${window.latexToMath(item)}) - (${values[i]})) <= (${tolerances[i] ?? tolerances[0]})`)) === "1");
-  } catch (e) {
-    false;
-  }
+      window.Algebrite.run(window.inputClean(`abs((${window.latexToMath(item)}) - (${values[i]})) <= (${tolerances[i] ?? tolerances[0]})`)) === "1"));
   </script>
 
 
 @Algebrite.check_margin: <script>
-  let rslt = false;
-  const units = window.Algebrite.run("units()");
-  window.Algebrite.run("units(1)");
-  try {
+  window.algebriteUnits(!/units\s*=\s*0/.test("@2"), () => {
     const input = window.inputClean(window.latexToMath(window.normalizeInputToArray(String.raw`@input`)[0]));
-    
-    rslt = window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
-  } catch (e) {
-    rslt = false;
-    console.warn(e.message)
-  }
-  window.Algebrite.run(`units(${units})`);
-  rslt
+    return window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
+  });
   </script>
 
 -->
@@ -283,9 +280,9 @@ Algebrite, but the easiest way is to import it.
 
    `import: https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md`
 
-   or the current version 0.7.0 via:
+   or the current version 0.7.1 via:
 
-   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.7.0/README.md`
+   `import: https://raw.githubusercontent.com/LiaTemplates/algebrite/0.7.1/README.md`
 
 2. __Copy the definitions into your Project__, see
    [Sec. Implementation](#implementation)
@@ -303,6 +300,9 @@ __Overview of all macros:__
 | `@Algebrite.check2(solution, tolerance)` | quiz: answer may differ from the solution by the tolerance        |
 | `@Algebrite.check_margin(min, max)`     | quiz: answer must lie within `min` and `max`                      |
 | `@Algebrite.check_expression(equation)` | quiz: answer must be an equivalent equation                       |
+
+All `check` macros take an optional last parameter `units=1` or `units=0`, see
+[Sec. Units in Quizzes](#units-in-quizzes).
 
 
 ## More Information
@@ -454,6 +454,27 @@ parameter itself has to be written in Algebrite syntax.
 </section>
 
 
+### Units in Quizzes
+
+                         --{{0}}--
+With units switched on, symbols like `m`, `km`, `s` or `kg` are treated as
+units, so `1500m` and `1.5km` are the same answer. An answer with a wrong or
+missing unit, like `1.5` or `1.5kg` instead of `1.5km`, is counted as wrong.
+
+| Macro                        | Units by default | Switch with |
+| ---------------------------- | ---------------- | ----------- |
+| `@Algebrite.check2`          | on               | `units=0`   |
+| `@Algebrite.check_margin`    | on               | `units=0`   |
+| `@Algebrite.check`           | off              | `units=1`   |
+| `@Algebrite.check_expression`| off              | `units=1`   |
+
+                         --{{1}}--
+Units are off for `check` and `check_expression`, because formulas often use
+variables that are also unit symbols: In `F = m*a`, `F` would be read as farad,
+`m` as metre and `a` as year, and the correct answer would be rejected. Only
+switch units on there, if the solution is a quantity like `1.5km`.
+
+
 ### `@Algebrite.check`
 
                          --{{0}}--
@@ -506,6 +527,22 @@ $x=\;$ [[ 2/5 ]] $\;\;\wedge\;\; y=$  [[ 5/7 ]] $\;\;\wedge\;\; z=$  [[ 3/4 ]]
 
 </div>
 
+                         --{{3}}--
+For answers with units, add `units=1`. Try `1500m` or `1,5km`.
+
+    {{3}}
+<div>
+
+```markdown
+[[ 1.5km ]]
+@Algebrite.check(1.5km, units=1)
+```
+
+[[ 1.5km ]]
+@Algebrite.check(1.5km, units=1)
+
+</div>
+
 
 ### `@Algebrite.check2`
 
@@ -545,13 +582,30 @@ $c=$ [[ 3/3 ]]
 
 </div>
 
+                        --{{2}}--
+Units are switched on by default, so solution and tolerance can have different
+units. Try `1490m` or `1,51km`.
+
+    {{2}}
+<div>
+
+```markdown
+[[ 1.5km ]]
+@Algebrite.check2(1.5km, 20m)
+```
+
+[[ 1.5km ]]
+@Algebrite.check2(1.5km, 20m)
+
+</div>
+
 
 ### `@Algebrite.check_margin`
 
                          --{{0}}--
 `@Algebrite.check_margin(min, max)` accepts every answer within a range, both
-bounds included. This is useful for measurements or estimations. Try `1,45`,
-`\frac{3}{2}` or `1.6`.
+bounds included. This is useful for measurements or estimations. Units are
+switched on by default, try `1,45km`, `1450m` or `1.6km`.
 
 ```markdown
 -> [[ 1.5km ]]
@@ -1534,6 +1588,21 @@ window.normalizeInputToArray = function(raw) {
   return [input.trim()];
 }
 
+// Runs fn with units(1|0) and restores the previous setting afterwards,
+// errors (e.g. incompatible units) count as a wrong answer.
+window.algebriteUnits = function(on, fn) {
+  const prev = window.Algebrite.run("units()");
+  window.Algebrite.run(`units(${on ? 1 : 0})`);
+  try {
+    return fn();
+  } catch (e) {
+    console.warn(e.message);
+    return false;
+  } finally {
+    window.Algebrite.run(`units(${prev})`);
+  }
+}
+
 // Usage:
 const inputArr = normalizeInputToArray(String.raw`@input`);
 
@@ -1662,12 +1731,9 @@ window.algebriteRun = function(input, console, pretty) {
   };
   const input = window.normalizeInputToArray(String.raw`@input`);
   const values = toList("@0");
-  try {
+  window.algebriteUnits(/units\s*=\s*1/.test("@1"), () =>
     input.length === values.length && input.every((item, i) => item !== "" &&
-      window.Algebrite.run(window.inputClean(`(${window.latexToMath(item)}) == (${values[i]})`)) === "1");
-  } catch (e) {
-    false;
-  }
+      window.Algebrite.run(window.inputClean(`(${window.latexToMath(item)}) == (${values[i]})`)) === "1"));
   </script>
 
 @Algebrite.check_expression: <script>
@@ -1679,11 +1745,8 @@ window.algebriteRun = function(input, console, pretty) {
   if (input.trim() === "") {
     send.lia("No input provided", [], false);
   } else {
-    try {
-      window.Algebrite.run(`${toExpr(window.latexToMath(input))} == ${toExpr("@0")}`) === "1";
-    } catch (e) {
-      false;
-    }
+    window.algebriteUnits(/units\s*=\s*1/.test("@1"), () =>
+      window.Algebrite.run(`${toExpr(window.latexToMath(input))} == ${toExpr("@0")}`) === "1");
   }
   </script>
 
@@ -1696,22 +1759,17 @@ window.algebriteRun = function(input, console, pretty) {
   const input = window.normalizeInputToArray(String.raw`@input`);
   const values = toList("@0");
   const tolerances = toList("@1");
-  try {
+  window.algebriteUnits(!/units\s*=\s*0/.test("@2"), () =>
     input.length === values.length && input.every((item, i) => item !== "" &&
-      window.Algebrite.run(window.inputClean(`abs((${window.latexToMath(item)}) - (${values[i]})) <= (${tolerances[i] ?? tolerances[0]})`)) === "1");
-  } catch (e) {
-    false;
-  }
+      window.Algebrite.run(window.inputClean(`abs((${window.latexToMath(item)}) - (${values[i]})) <= (${tolerances[i] ?? tolerances[0]})`)) === "1"));
   </script>
 
 
 @Algebrite.check_margin: <script>
-  try {
+  window.algebriteUnits(!/units\s*=\s*0/.test("@2"), () => {
     const input = window.inputClean(window.latexToMath(window.normalizeInputToArray(String.raw`@input`)[0]));
-    window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
-  } catch (e) {
-    false;
-  }
+    return window.Algebrite.run(`and((@0) <= (${input}), (${input}) <= (@1))`) === "1";
+  });
   </script>
 
 ```
