@@ -188,7 +188,6 @@ window.algebriteRun = function(input, console, pretty) {
 
 @Algebrite.pretty: <script> window.algebriteRun(String.raw`@input`, console, true); "LIA: stop" </script>
 
-
 @Algebrite.repl: <script>
   send.handle("input", input => {
     console.log("=> ");
@@ -413,6 +412,69 @@ f(x) = x^3 - 2*x   # define a function to play with
 f(1)
 ```
 @Algebrite.repl
+
+
+## Formulas with Inputs
+
+                         --{{0}}--
+Algebrite can also be called from any LiaScript script. Combined with an input
+widget, a formula is recomputed and rendered whenever the learner changes a
+value. The widget publishes its value with `output="exponent"`, the second
+script reads it via `@input` with the channel name `exponent` in backticks as
+its argument. `Algebrite.run(code, true)` returns
+the plain result and its LaTeX form. Because of `modify="-- formula\n"`, a
+double-click on the formula shows only the Algebrite code between the two
+`-- formula` lines, which are comments for Algebrite.
+
+Exponent $n$:
+<script input="range" min="0" max="10" value="3" output="exponent" aria-label="exponent n">
+@input
+</script>
+
+<script modify="-- formula\n" type="text/maxima" style="display: block">
+function run() {
+  if (!window.Algebrite) return setTimeout(run, 100)
+
+  const [plain, latex] = window.Algebrite.run(`-- formula
+(3 * x - 5x)^(@input(`exponent`)) * (x + x)
+-- formula
+`, true)
+
+  send.lia(plain.includes("Stop:") ? plain : "LIASCRIPT: " + latex.trim().split("\n").pop())
+  send.lia("LIA: stop")
+}
+
+setTimeout(run, 0)
+
+"LIA: wait"
+</script>
+
+Source:
+
+````markdown
+Exponent $n$:
+<script input="range" min="0" max="10" value="3" output="exponent" aria-label="exponent n">
+@input
+</script>
+
+<script modify="-- formula\n" type="text/maxima" style="display: block">
+function run() {
+  if (!window.Algebrite) return setTimeout(run, 100)
+
+  const [plain, latex] = window.Algebrite.run(`-- formula
+(3 * x - 5x)^(@input(`exponent`)) * (x + x)
+-- formula
+`, true)
+
+  send.lia(plain.includes("Stop:") ? plain : "LIASCRIPT: " + latex.trim().split("\n").pop())
+  send.lia("LIA: stop")
+}
+
+setTimeout(run, 0)
+
+"LIA: wait"
+</script>
+````
 
 
 ## Quizzes
