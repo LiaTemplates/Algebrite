@@ -168,7 +168,7 @@ window.algebriteRun = function(input, console, pretty) {
     const toggle = line.match(/^\s*pretty\(([01])\)\s*((#|--).*)?$/);
     if (toggle) return window.algebritePretty = toggle[1] === "1";
 
-    const [plain, latex] = window.Algebrite.run(line, true);
+    const [plain, latex] = window.Algebrite.run(window.normalizeUnicode(line), true);
     if (!plain) return;
     printed++;
     if (plain.includes("Stop:")) {
@@ -260,7 +260,9 @@ Template for the Algebrite JavaScript Computer-Algebra-System (CAS)
 https://algebrite.org to be used in [LiaScript](https://LiaScript.github.io).
 It makes Markdown code-blocks executable, renders results as pretty formulas and
 lets you check quiz answers mathematically, so `0,5`, `1/2`, `50%` and
-`\frac{1}{2}` are all accepted as the same answer.
+`\frac{1}{2}` are all accepted as the same answer. Typographic minus signs and
+dashes (`−`, `–`, `—`), wide underscores (`＿`) and subscript digits (`x₁`) are
+converted too, so `2−1` and `x₁` work like `2-1` and `x_1`.
 
 __Try it on LiaScript:__
 
@@ -1752,7 +1754,7 @@ window.algebriteRun = function(input, console, pretty) {
     const toggle = line.match(/^\s*pretty\(([01])\)\s*((#|--).*)?$/);
     if (toggle) return window.algebritePretty = toggle[1] === "1";
 
-    const [plain, latex] = window.Algebrite.run(line, true);
+    const [plain, latex] = window.Algebrite.run(window.normalizeUnicode(line), true);
     if (!plain) return;
     printed++;
     if (plain.includes("Stop:")) {

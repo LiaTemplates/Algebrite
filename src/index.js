@@ -1,7 +1,22 @@
 import 'algebrite' // sets globalThis.Algebrite
 import AlgebraLatex from 'algebra-latex'
 
+// Characters that look right but Algebrite cannot parse:
+// dashes and math minus -> '-', wide underscores -> '_', subscript digits x₁ -> x_1
+const SUBSCRIPTS = '₀₁₂₃₄₅₆₇₈₉'
+window.normalizeUnicode = function (input) {
+  if (!input || typeof input !== 'string') {
+    return input
+  }
+  return input
+    .replace(/[‐-―−﹘﹣－]/g, '-')
+    .replace(/[＿﹍-﹏]/g, '_')
+    .replace(/[₀-₉]+/g, (d) => '_' + [...d].map((c) => SUBSCRIPTS.indexOf(c)).join(''))
+    .replace(/\s*_\s*/g, '_')
+}
+
 window.latexToMath = function (input) {
+  input = window.normalizeUnicode(input)
   if (!input || typeof input !== 'string') {
     return input
   }
